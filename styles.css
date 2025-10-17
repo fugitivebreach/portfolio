@@ -164,33 +164,45 @@ body {
 }
 
 .status-indicator {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    border: 2px solid #000;
+    border: 2px solid #1a1a1a;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    transition: background-color 0.3s ease;
 }
 
+/* Discord status colors */
 .status-indicator.online {
-    background: #43b581;
+    background: #43b581; /* Green */
+    box-shadow: 0 0 8px rgba(67, 181, 129, 0.3);
+}
+
+.status-indicator.idle {
+    background: #faa61a; /* Yellow/Orange */
+    box-shadow: 0 0 8px rgba(250, 166, 26, 0.3);
 }
 
 .status-indicator.away {
-    background: #faa61a;
-}
-
-.status-indicator.offline {
-    background: #747f8d;
+    background: #faa61a; /* Yellow/Orange */
+    box-shadow: 0 0 8px rgba(250, 166, 26, 0.3);
 }
 
 .status-indicator.dnd {
-    background: #f04747;
+    background: #f04747; /* Red */
+    box-shadow: 0 0 8px rgba(240, 71, 71, 0.3);
+}
+
+.status-indicator.offline {
+    background: #747f8d; /* Gray */
+    box-shadow: 0 0 8px rgba(116, 127, 141, 0.3);
 }
 
 .status-indicator.invisible {
-    background: #747f8d;
+    background: #747f8d; /* Gray */
+    box-shadow: 0 0 8px rgba(116, 127, 141, 0.3);
 }
 
 .discord-info {

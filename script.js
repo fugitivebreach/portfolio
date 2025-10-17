@@ -99,39 +99,74 @@ function generateTabs() {
 
 // Load Discord data using Lanyard API
 async function loadDiscordData() {
-    if (!config.discordID) return;
+    if (!config.discordID) {
+        console.log('No Discord ID configured');
+        return;
+    }
+    
+    console.log('🔍 Loading Discord data for ID:', config.discordID);
+    console.log('📋 Make sure you joined the Lanyard Discord server: https://discord.gg/lanyard');
     
     try {
         // Using Lanyard API to get Discord presence
         const response = await fetch(`https://api.lanyard.rest/v1/users/${config.discordID}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         
         if (data.success && data.data) {
             const discordData = data.data;
+            const user = discordData.discord_user;
             
             // Update Discord profile information
-            config.discordUsername = discordData.discord_user.username;
-            config.discordDisplayName = discordData.discord_user.display_name || discordData.discord_user.username;
-            config.discordAvatar = `https://cdn.discordapp.com/avatars/${discordData.discord_user.id}/${discordData.discord_user.avatar}.png?size=128`;
+            config.discordUsername = user.username;
+            config.discordDisplayName = user.display_name || user.global_name || user.username;
+            
+            // Handle avatar URL - check if user has custom avatar
+            if (user.avatar) {
+                config.discordAvatar = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`;
+            } else {
+                // Use default Discord avatar
+                const defaultAvatarNumber = parseInt(user.discriminator) % 5;
+                config.discordAvatar = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+            }
+            
             config.discordStatus = discordData.discord_status; // online, idle, dnd, offline
             
             // Update activities if available
             if (discordData.activities && discordData.activities.length > 0) {
                 config.discordActivity = discordData.activities[0];
+                console.log('Current activity:', config.discordActivity.name);
             }
             
-            console.log('Discord data loaded successfully:');
+            console.log('✅ Discord data loaded successfully:');
             console.log('Username:', config.discordUsername);
             console.log('Display Name:', config.discordDisplayName);
             console.log('Status:', config.discordStatus);
+            console.log('Avatar URL:', config.discordAvatar);
+        } else {
+            throw new Error('Invalid response from Lanyard API');
         }
     } catch (error) {
-        console.error('Error loading Discord data:', error);
+        console.error('❌ Error loading Discord data:', error);
+        
+        if (error.message.includes('404')) {
+            console.log('🚨 Discord ID not found! This means:');
+            console.log('1. Join the Lanyard Discord server: https://discord.gg/lanyard');
+            console.log('2. Wait 5-10 minutes after joining');
+            console.log('3. Make sure your Discord ID is correct');
+            console.log('4. Your Discord privacy settings allow server members to see your status');
+        }
+        
         // Fallback to default values
-        config.discordUsername = config.discordID;
-        config.discordDisplayName = config.discordID;
+        config.discordUsername = 'archiveAnt';
+        config.discordDisplayName = 'archiveAnt';
         config.discordAvatar = 'https://cdn.discordapp.com/embed/avatars/0.png';
         config.discordStatus = 'offline';
+        console.log('Using fallback Discord data');
     }
 }
 
@@ -204,9 +239,12 @@ function initializeTabs() {
 
 // Populate content with config data
 function populateContent() {
-    document.getElementById('userName').textContent = config.name;
-    document.getElementById('userDescription').textContent = config.description;
-    document.getElementById('playlistDescription').textContent = config.playlistDescription;
+    // Update basic profile info
+    const userNameElement = document.getElementById('userName');
+    const userDescriptionElement = document.getElementById('userDescription');
+    
+    if (userNameElement) userNameElement.textContent = config.name;
+    if (userDescriptionElement) userDescriptionElement.textContent = config.description;
     
     // Update Discord information with real data
     const discordNameElement = document.getElementById('discordName');
@@ -214,22 +252,31 @@ function populateContent() {
     const discordStatusElement = document.querySelector('.discord-status');
     const statusIndicatorElement = document.querySelector('.status-indicator');
     
-    if (config.discordDisplayName && config.discordDisplayName !== config.discordID) {
-        discordNameElement.textContent = config.discordDisplayName;
-        console.log('Using Discord display name:', config.discordDisplayName);
-    } else if (config.discordUsername && config.discordUsername !== config.discordID) {
-        discordNameElement.textContent = config.discordUsername;
-        console.log('Using Discord username:', config.discordUsername);
-    } else {
-        discordNameElement.textContent = config.discordID;
-        console.log('Using Discord ID as fallback:', config.discordID);
+    if (discordNameElement) {
+        // Prioritize display name, then username, then ID
+        if (config.discordDisplayName && config.discordDisplayName !== 'Discord User') {
+            discordNameElement.textContent = config.discordDisplayName;
+            console.log('📝 Using Discord display name:', config.discordDisplayName);
+        } else if (config.discordUsername && config.discordUsername !== 'User') {
+            discordNameElement.textContent = config.discordUsername;
+            console.log('📝 Using Discord username:', config.discordUsername);
+        } else {
+            discordNameElement.textContent = config.discordID;
+            console.log('📝 Using Discord ID as fallback:', config.discordID);
+        }
     }
     
-    if (config.discordAvatar) {
+    // Update avatar with error handling
+    if (discordAvatarElement && config.discordAvatar) {
         discordAvatarElement.src = config.discordAvatar;
+        discordAvatarElement.onerror = function() {
+            console.log('❌ Avatar failed to load, using default');
+            this.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+        };
+        console.log('🖼️ Updated Discord avatar');
     }
     
-    // Update status
+    // Update status with proper styling
     const statusMap = {
         'online': { text: 'Online', class: 'online' },
         'idle': { text: 'Away', class: 'away' },
@@ -238,8 +285,20 @@ function populateContent() {
     };
     
     const status = statusMap[config.discordStatus] || statusMap['offline'];
-    discordStatusElement.textContent = status.text;
-    statusIndicatorElement.className = `status-indicator ${status.class}`;
+    
+    if (discordStatusElement) {
+        discordStatusElement.textContent = status.text;
+        console.log('🟢 Discord status:', status.text);
+    }
+    
+    if (statusIndicatorElement) {
+        statusIndicatorElement.className = `status-indicator ${status.class}`;
+    }
+    
+    // Log current activity if available
+    if (config.discordActivity) {
+        console.log('🎮 Current activity:', config.discordActivity.name);
+    }
 }
 
 
