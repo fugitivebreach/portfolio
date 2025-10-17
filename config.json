@@ -1,0 +1,25 @@
+{
+  "name": "archiveAnt",
+  "description": "full stack developer specializing in modern web technologies",
+  "discordID": "1317342800941023242",
+  "spotifyClientId": "c257068a6d924ee8aef6801dce477837",
+  "tabs": [
+    {
+      "tabName": "home",
+      "displayName": "home",
+      "type": "profile"
+    },
+    {
+      "tabName": "about",
+      "displayName": "about", 
+      "type": "text",
+      "content": "Full stack developer passionate about creating modern web experiences with cutting-edge technologies."
+    },
+    {
+      "tabName": "projects",
+      "displayName": "projects",
+      "type": "text",
+      "content": "Coming soon - showcase of my latest projects and work."
+    }
+  ]
+}

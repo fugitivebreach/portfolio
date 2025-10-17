@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Animated dots background */
+.dots-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dot {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: fall linear infinite, shine 3s ease-in-out infinite alternate;
+}
+
+.dot.small {
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.dot.medium {
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.dot.large {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh);
+    }
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+@keyframes shine {
+    0% {
+        opacity: 0.3;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
+}
+
+
+/* Main container */
+.main-container {
+    position: relative;
+    z-index: 10;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 50px 20px 50px;
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid #333;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    margin-top: 50px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 0;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+    font-family: inherit;
+}
+
+.tab:hover,
+.tab.active {
+    color: #fff;
+}
+
+/* Tab separator */
+.tab-separator {
+    height: 1px;
+    background: #333;
+    margin: 0 0 30px 0;
+}
+
+/* Content */
+.content {
+    position: relative;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Typography */
+.name {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+
+.description {
+    color: #888;
+    font-size: 16px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Discord profile */
+.discord-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.discord-avatar {
+    position: relative;
+    width: 50px;
+    height: 50px;
+}
+
+.discord-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #000;
+}
+
+.status-indicator.online {
+    background: #43b581;
+}
+
+.status-indicator.away {
+    background: #faa61a;
+}
+
+.status-indicator.offline {
+    background: #747f8d;
+}
+
+.status-indicator.dnd {
+    background: #f04747;
+}
+
+.status-indicator.invisible {
+    background: #747f8d;
+}
+
+.discord-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.discord-name {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.discord-status {
+    color: #888;
+    font-size: 14px;
+}
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-container {
+        margin: 30px 10px 20px;
+        padding: 40px 15px 30px;
+    }
+    
+    .name {
+        font-size: 2rem;
+    }
+    
+    .song-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .song-thumbnail {
+        width: 80px;
+        height: 80px;
+    }
+}
