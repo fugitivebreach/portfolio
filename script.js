@@ -468,9 +468,8 @@ async function searchAndPlayTrack(query) {
     try {
         console.log('🔍 Searching for:', query);
         
-        // Use YouTube Data API to search (using a simple approach)
-        // For demo, we'll use a known video ID - you can implement full search later
-        const videoId = 'dQw4w9WgXcQ'; // Replace with actual search result
+        // East Coast by alexgoffline - https://www.youtube.com/watch?v=avhK06MdPn4
+        const videoId = 'avhK06MdPn4';
         
         const trackData = {
             title: 'East Coast',
@@ -486,8 +485,10 @@ async function searchAndPlayTrack(query) {
         // Display the track with custom player UI
         displayCustomPlayer(trackData);
         
-        // Initialize YouTube player
-        initializeYouTubePlayer(videoId);
+        // Wait a bit for DOM to be ready, then initialize YouTube player
+        setTimeout(() => {
+            initializeYouTubePlayer(videoId);
+        }, 500);
         
         console.log('✅ Loaded:', trackData.title, 'by', trackData.author);
         
@@ -503,16 +504,26 @@ async function searchAndPlayTrack(query) {
 
 // Initialize YouTube player with custom controls
 function initializeYouTubePlayer(videoId) {
+    console.log('🎵 Initializing YouTube player with video ID:', videoId);
+    
     // Create hidden YouTube player container
     if (!document.getElementById('youtube-player-container')) {
         const container = document.createElement('div');
         container.id = 'youtube-player-container';
         container.style.display = 'none';
         document.body.appendChild(container);
+        console.log('✅ Created YouTube player container');
     }
     
     // Create YouTube player
     if (typeof YT !== 'undefined' && YT.Player) {
+        console.log('✅ YouTube API loaded, creating player...');
+        
+        // Destroy existing player if any
+        if (youtubePlayer && youtubePlayer.destroy) {
+            youtubePlayer.destroy();
+        }
+        
         youtubePlayer = new YT.Player('youtube-player-container', {
             height: '0',
             width: '0',
@@ -523,17 +534,33 @@ function initializeYouTubePlayer(videoId) {
                 disablekb: 1,
                 fs: 0,
                 modestbranding: 1,
-                playsinline: 1
+                playsinline: 1,
+                enablejsapi: 1
             },
             events: {
                 'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+                'onStateChange': onPlayerStateChange,
+                'onError': onPlayerError
             }
         });
     } else {
+        console.log('⏳ YouTube API not ready yet, retrying...');
         // YouTube API not loaded yet, retry
         setTimeout(() => initializeYouTubePlayer(videoId), 500);
     }
+}
+
+// Player error callback
+function onPlayerError(event) {
+    console.error('❌ YouTube player error:', event.data);
+    const errorMessages = {
+        2: 'Invalid video ID',
+        5: 'HTML5 player error',
+        100: 'Video not found or private',
+        101: 'Video not allowed to be played in embedded players',
+        150: 'Video not allowed to be played in embedded players'
+    };
+    console.error('Error details:', errorMessages[event.data] || 'Unknown error');
 }
 
 // Player ready callback
