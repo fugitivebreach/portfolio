@@ -317,7 +317,7 @@ function renderProjects() {
                 </svg>
             </div>
             <div class="project-content">
-                <p class="project-description">${project.projectDescription.replace(/\\n/g, '<br><br>')}</p>
+                <p class="project-description">${project.projectDescription}</p>
                 <div class="project-languages">
                     ${project.projectCodeLanguages.map(lang => `
                         <span class="language-tag">
