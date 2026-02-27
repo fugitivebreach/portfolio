@@ -618,23 +618,58 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .main-container {
-        margin: 30px 10px 20px;
-        padding: 40px 15px 30px;
+        margin: 20px 10px;
+        padding: 30px 15px;
+        max-width: 100%;
     }
     
+    /* Typography */
     .name {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     
-    .song-info {
-        flex-direction: column;
-        align-items: flex-start;
+    .description {
+        font-size: 14px;
+    }
+    
+    /* Tabs */
+    .tabs {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .tab {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+    
+    /* Discord Profile */
+    .discord-profile {
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+    
+    .discord-avatar {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .discord-name {
+        font-size: 15px;
+    }
+    
+    .discord-status {
+        font-size: 13px;
+    }
+    
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* Projects */
+    .projects-container {
         gap: 10px;
-    }
-    
-    .song-thumbnail {
-        width: 80px;
-        height: 80px;
     }
     
     .project-header {
@@ -645,26 +680,153 @@ body {
         font-size: 15px;
     }
     
+    .project-description {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+    
     .project-item.open .project-content {
         padding: 0 16px 16px 16px;
+    }
+    
+    .language-tag {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+    
+    .language-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* Music Player */
+    .music-player {
+        margin-top: 25px;
+    }
+    
+    .music-player-header {
+        padding: 14px 18px;
+    }
+    
+    .music-player-title {
+        font-size: 13px;
+    }
+    
+    .music-player-content {
+        padding: 18px;
     }
     
     .music-track {
         flex-direction: column;
         align-items: flex-start;
+        gap: 12px;
     }
     
     .music-album-art {
         width: 100%;
         height: auto;
         aspect-ratio: 1;
+        max-width: 250px;
+        align-self: center;
     }
     
     .music-info {
         width: 100%;
+        text-align: center;
     }
     
-    .spotify-link {
-        align-self: center;
+    .music-track-name {
+        font-size: 14px;
+    }
+    
+    .music-artist-name {
+        font-size: 12px;
+    }
+    
+    .music-duration {
+        font-size: 11px;
+    }
+    
+    .music-controls {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .music-control-btn {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .music-play-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .music-progress-bar {
+        height: 6px;
+    }
+    
+    .music-time-display {
+        font-size: 10px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .main-container {
+        margin: 15px 8px;
+        padding: 25px 12px;
+    }
+    
+    .name {
+        font-size: 1.5rem;
+    }
+    
+    .tabs {
+        gap: 12px;
+    }
+    
+    .tab {
+        font-size: 12px;
+    }
+    
+    .discord-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .discord-name {
+        font-size: 14px;
+    }
+    
+    .discord-status {
+        font-size: 12px;
+    }
+    
+    .project-header {
+        padding: 12px 14px;
+    }
+    
+    .project-title {
+        font-size: 14px;
+    }
+    
+    .music-album-art {
+        max-width: 200px;
+    }
+    
+    .music-controls {
+        gap: 10px;
+    }
+    
+    .music-control-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .music-play-btn {
+        width: 46px;
+        height: 46px;
     }
 }
