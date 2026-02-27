@@ -144,10 +144,11 @@ body {
 
 /* Discord profile */
 .discord-profile {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
     gap: 15px;
     margin-bottom: 30px;
+    align-items: start;
 }
 
 .discord-avatar {
@@ -208,16 +209,20 @@ body {
 .discord-info {
     display: flex;
     flex-direction: column;
+    gap: 4px;
+    justify-content: center;
 }
 
 .discord-name {
     font-weight: 500;
     font-size: 16px;
+    line-height: 1.2;
 }
 
 .discord-status {
     color: #888;
     font-size: 14px;
+    line-height: 1.2;
 }
 
 
@@ -552,12 +557,16 @@ body {
 .music-play-btn {
     width: 44px;
     height: 44px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #ffffff;
     border-color: transparent;
 }
 
+.music-play-btn svg {
+    color: #000000;
+}
+
 .music-play-btn:hover {
-    background: linear-gradient(135deg, #7c8ef0 0%, #8a5bb5 100%);
+    background: #f0f0f0;
     transform: scale(1.1);
 }
 
@@ -568,7 +577,7 @@ body {
 .music-progress-bar {
     width: 100%;
     height: 4px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 2px;
     overflow: hidden;
     cursor: pointer;
@@ -576,7 +585,7 @@ body {
 
 .music-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    background: #ffffff;
     border-radius: 2px;
     transition: width 0.3s ease;
 }

@@ -1218,7 +1218,35 @@ function populateContent() {
 // Update Discord data periodically
 async function updateDiscordData() {
     await loadDiscordData();
-    populateContent();
+    
+    // Only update Discord-related UI elements, not the entire content
+    const discordNameElement = document.getElementById('discordName');
+    const discordAvatarElement = document.getElementById('discordAvatar');
+    const discordStatusElement = document.querySelector('.discord-status');
+    const statusIndicatorElement = document.querySelector('.status-indicator');
+    
+    if (discordNameElement) {
+        if (config.discordDisplayName && config.discordDisplayName !== 'Discord User') {
+            discordNameElement.textContent = config.discordDisplayName;
+        } else if (config.discordUsername && config.discordUsername !== 'User') {
+            discordNameElement.textContent = config.discordUsername;
+        } else {
+            discordNameElement.textContent = config.discordID;
+        }
+    }
+    
+    if (discordAvatarElement && config.discordAvatar) {
+        discordAvatarElement.src = config.discordAvatar;
+    }
+    
+    if (discordStatusElement && config.discordStatus) {
+        const statusText = config.discordStatus.charAt(0).toUpperCase() + config.discordStatus.slice(1);
+        discordStatusElement.textContent = statusText === 'Dnd' ? 'Do Not Disturb' : statusText;
+    }
+    
+    if (statusIndicatorElement && config.discordStatus) {
+        statusIndicatorElement.className = 'status-indicator ' + config.discordStatus.toLowerCase();
+    }
 }
 
 // Update Discord status every 30 seconds
