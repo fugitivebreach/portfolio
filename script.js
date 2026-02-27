@@ -183,6 +183,20 @@ async function loadDiscordData() {
                 console.log('Current activity:', config.discordActivity.name);
             }
             
+            // Check for Spotify listening activity
+            if (discordData.spotify) {
+                config.spotifyListening = {
+                    song: discordData.spotify.song,
+                    artist: discordData.spotify.artist,
+                    album: discordData.spotify.album,
+                    albumArt: discordData.spotify.album_art_url,
+                    trackId: discordData.spotify.track_id
+                };
+                console.log('🎵 Listening to Spotify:', config.spotifyListening.song, 'by', config.spotifyListening.artist);
+            } else {
+                config.spotifyListening = null;
+            }
+            
             console.log('✅ Discord data loaded successfully:');
             console.log('Username:', config.discordUsername);
             console.log('Display Name:', config.discordDisplayName);
@@ -975,6 +989,20 @@ async function loadDiscordData() {
                 console.log('Current activity:', config.discordActivity.name);
             }
             
+            // Check for Spotify listening activity
+            if (discordData.spotify) {
+                config.spotifyListening = {
+                    song: discordData.spotify.song,
+                    artist: discordData.spotify.artist,
+                    album: discordData.spotify.album,
+                    albumArt: discordData.spotify.album_art_url,
+                    trackId: discordData.spotify.track_id
+                };
+                console.log('🎵 Listening to Spotify:', config.spotifyListening.song, 'by', config.spotifyListening.artist);
+            } else {
+                config.spotifyListening = null;
+            }
+            
             console.log('✅ Discord data loaded successfully:');
             console.log('Username:', config.discordUsername);
             console.log('Display Name:', config.discordDisplayName);
@@ -1251,6 +1279,23 @@ async function updateDiscordData() {
     
     if (statusIndicatorElement && config.discordStatus) {
         statusIndicatorElement.className = 'status-indicator ' + config.discordStatus.toLowerCase();
+    }
+    
+    // Update currently playing section with Spotify data from Lanyard
+    const currentlyPlayingInfo = document.getElementById('currentlyPlayingInfo');
+    if (currentlyPlayingInfo) {
+        if (config.spotifyListening) {
+            currentlyPlayingInfo.innerHTML = `
+                <span class="song-title">${config.spotifyListening.song}</span>
+                <span class="song-artist">${config.spotifyListening.artist}</span>
+            `;
+        } else if (currentTrack) {
+            // Fallback to music player data if no Spotify listening
+            currentlyPlayingInfo.innerHTML = `
+                <span class="song-title">${currentTrack.title}</span>
+                <span class="song-artist">${currentTrack.author}</span>
+            `;
+        }
     }
 }
 
