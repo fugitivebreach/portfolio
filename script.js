@@ -1,6 +1,8 @@
 // Configuration data
 let config = {};
 let projects = [];
+let playlist = [];
+let currentTrackIndex = 0;
 let youtubePlayer = null;
 let currentTrack = null;
 let progressInterval = null;
@@ -438,8 +440,8 @@ async function loadSpotifyPlayer() {
     }
     
     try {
-        // Search and load the track
-        await searchAndPlayTrack('East Coast alexgoffline');
+        // Load first track from playlist
+        await loadTrackFromPlaylist(0);
         
     } catch (error) {
         console.error('Error loading music player:', error);
@@ -461,23 +463,31 @@ function onYouTubeIframeAPIReady() {
     console.log('✅ YouTube API ready');
 }
 
-// Search and play track using YouTube
-async function searchAndPlayTrack(query) {
+// Load and play track from playlist
+async function loadTrackFromPlaylist(index) {
     const musicPlayerContent = document.getElementById('musicPlayerContent');
     
     try {
-        console.log('🔍 Searching for:', query);
+        if (!playlist || playlist.length === 0) {
+            throw new Error('Playlist is empty');
+        }
         
-        // East Coast by alexgoffline - https://www.youtube.com/watch?v=avhK06MdPn4
-        const videoId = 'avhK06MdPn4';
+        // Ensure index is within bounds
+        if (index < 0) index = playlist.length - 1;
+        if (index >= playlist.length) index = 0;
+        
+        currentTrackIndex = index;
+        const song = playlist[index];
+        
+        console.log('🔍 Loading track:', song.title, 'by', song.artist);
         
         const trackData = {
-            title: 'East Coast',
-            author: 'alexgoffline',
-            duration: 180000,
-            uri: `https://www.youtube.com/watch?v=${videoId}`,
-            artworkUrl: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
-            identifier: videoId
+            title: song.title,
+            author: song.artist,
+            duration: song.duration,
+            uri: `https://www.youtube.com/watch?v=${song.videoId}`,
+            artworkUrl: `https://i.ytimg.com/vi/${song.videoId}/maxresdefault.jpg`,
+            identifier: song.videoId
         };
         
         currentTrack = trackData;
@@ -485,12 +495,18 @@ async function searchAndPlayTrack(query) {
         // Display the track with custom player UI
         displayCustomPlayer(trackData);
         
-        // Wait a bit for DOM to be ready, then initialize YouTube player
-        setTimeout(() => {
-            initializeYouTubePlayer(videoId);
-        }, 500);
+        // Initialize or load new video in YouTube player
+        if (youtubePlayer && youtubePlayer.loadVideoById) {
+            youtubePlayer.loadVideoById(song.videoId);
+            console.log('✅ Loaded new video:', trackData.title);
+        } else {
+            // Wait a bit for DOM to be ready, then initialize YouTube player
+            setTimeout(() => {
+                initializeYouTubePlayer(song.videoId);
+            }, 500);
+        }
         
-        console.log('✅ Loaded:', trackData.title, 'by', trackData.author);
+        console.log('✅ Now playing:', trackData.title, 'by', trackData.author, `(${index + 1}/${playlist.length})`);
         
     } catch (error) {
         console.error('❌ Error loading track:', error);
@@ -583,6 +599,9 @@ function onPlayerStateChange(event) {
     } else if (event.data === YT.PlayerState.ENDED) {
         if (playBtn) playBtn.setAttribute('d', 'M8 5v14l11-7z');
         stopProgressTracking();
+        // Auto-play next track when current one ends
+        console.log('🎵 Track ended, playing next...');
+        skipForward();
     }
 }
 
@@ -710,23 +729,26 @@ function togglePlay() {
 }
 
 function skipBackward() {
-    if (!youtubePlayer) return;
+    if (!playlist || playlist.length === 0) return;
+    
     try {
-        const currentTime = youtubePlayer.getCurrentTime();
-        youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
-        console.log('⏮️ Skip backward 10s');
+        // Go to previous track
+        const newIndex = currentTrackIndex - 1;
+        loadTrackFromPlaylist(newIndex);
+        console.log('⏮️ Previous track');
     } catch (error) {
         console.error('Error skipping backward:', error);
     }
 }
 
 function skipForward() {
-    if (!youtubePlayer) return;
+    if (!playlist || playlist.length === 0) return;
+    
     try {
-        const currentTime = youtubePlayer.getCurrentTime();
-        const duration = youtubePlayer.getDuration();
-        youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
-        console.log('⏭️ Skip forward 10s');
+        // Go to next track
+        const newIndex = currentTrackIndex + 1;
+        loadTrackFromPlaylist(newIndex);
+        console.log('⏭️ Next track');
     } catch (error) {
         console.error('Error skipping forward:', error);
     }
