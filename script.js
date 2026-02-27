@@ -93,32 +93,30 @@ function generateTabs() {
                 <h1 class="name" id="userName"></h1>
                 <p class="description" id="userDescription"></p>
                 
-                <!-- Discord profile -->
-                <div class="discord-profile">
-                    <div class="discord-avatar">
-                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" id="discordAvatar">
-                        <div class="status-indicator online"></div>
+                <!-- Discord profile with currently playing -->
+                <div class="profile-container">
+                    <div class="discord-profile">
+                        <div class="discord-avatar">
+                            <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" id="discordAvatar">
+                            <div class="status-indicator online"></div>
+                        </div>
+                        <div class="discord-info">
+                            <span class="discord-name" id="discordName"></span>
+                            <span class="discord-status">Online</span>
+                        </div>
                     </div>
-                    <div class="discord-info">
-                        <span class="discord-name" id="discordName"></span>
-                        <span class="discord-status">Online</span>
-                    </div>
-                </div>
-                
-                <!-- Music Player -->
-                <div class="music-player" id="musicPlayer">
-                    <div class="music-player-header">
-                        <svg class="music-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"></path>
-                            <circle cx="6" cy="18" r="3"></circle>
-                            <circle cx="18" cy="16" r="3"></circle>
-                        </svg>
-                        <span class="music-player-title">Now Playing</span>
-                    </div>
-                    <div class="music-player-content" id="musicPlayerContent">
-                        <div class="music-loading">
-                            <div class="loading-spinner"></div>
-                            <span>Loading music...</span>
+                    <div class="currently-playing">
+                        <div class="currently-playing-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18V5l12-2v13"></path>
+                                <circle cx="6" cy="18" r="3"></circle>
+                                <circle cx="18" cy="16" r="3"></circle>
+                            </svg>
+                            <span>Listening to</span>
+                        </div>
+                        <div class="currently-playing-info" id="currentlyPlayingInfo">
+                            <span class="song-title">No song playing</span>
+                            <span class="song-artist">-</span>
                         </div>
                     </div>
                 </div>
@@ -664,6 +662,15 @@ function displayCustomPlayer(track) {
     
     if (!musicPlayerContent) return;
     
+    // Update currently playing in profile section
+    const currentlyPlayingInfo = document.getElementById('currentlyPlayingInfo');
+    if (currentlyPlayingInfo) {
+        currentlyPlayingInfo.innerHTML = `
+            <span class="song-title">${track.title}</span>
+            <span class="song-artist">${track.author}</span>
+        `;
+    }
+    
     const duration = formatDuration(track.duration);
     
     musicPlayerContent.innerHTML = `
@@ -878,32 +885,30 @@ function generateTabs() {
                 <h1 class="name" id="userName"></h1>
                 <p class="description" id="userDescription"></p>
                 
-                <!-- Discord profile -->
-                <div class="discord-profile">
-                    <div class="discord-avatar">
-                        <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" id="discordAvatar">
-                        <div class="status-indicator online"></div>
+                <!-- Discord profile with currently playing -->
+                <div class="profile-container">
+                    <div class="discord-profile">
+                        <div class="discord-avatar">
+                            <img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Discord Avatar" id="discordAvatar">
+                            <div class="status-indicator online"></div>
+                        </div>
+                        <div class="discord-info">
+                            <span class="discord-name" id="discordName"></span>
+                            <span class="discord-status">Online</span>
+                        </div>
                     </div>
-                    <div class="discord-info">
-                        <span class="discord-name" id="discordName"></span>
-                        <span class="discord-status">Online</span>
-                    </div>
-                </div>
-                
-                <!-- Music Player -->
-                <div class="music-player" id="musicPlayer">
-                    <div class="music-player-header">
-                        <svg class="music-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 18V5l12-2v13"></path>
-                            <circle cx="6" cy="18" r="3"></circle>
-                            <circle cx="18" cy="16" r="3"></circle>
-                        </svg>
-                        <span class="music-player-title">Now Playing</span>
-                    </div>
-                    <div class="music-player-content" id="musicPlayerContent">
-                        <div class="music-loading">
-                            <div class="loading-spinner"></div>
-                            <span>Loading music...</span>
+                    <div class="currently-playing">
+                        <div class="currently-playing-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18V5l12-2v13"></path>
+                                <circle cx="6" cy="18" r="3"></circle>
+                                <circle cx="18" cy="16" r="3"></circle>
+                            </svg>
+                            <span>Listening to</span>
+                        </div>
+                        <div class="currently-playing-info" id="currentlyPlayingInfo">
+                            <span class="song-title">No song playing</span>
+                            <span class="song-artist">-</span>
                         </div>
                     </div>
                 </div>
