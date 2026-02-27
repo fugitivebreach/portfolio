@@ -676,14 +676,8 @@ function displayCustomPlayer(track) {
     
     if (!musicPlayerContent) return;
     
-    // Update currently playing in profile section
-    const currentlyPlayingInfo = document.getElementById('currentlyPlayingInfo');
-    if (currentlyPlayingInfo) {
-        currentlyPlayingInfo.innerHTML = `
-            <span class="song-title">${track.title}</span>
-            <span class="song-artist">${track.author}</span>
-        `;
-    }
+    // Don't update profile section here - it should only show Lanyard Spotify data
+    // The profile "Listening to" section is updated by updateDiscordData()
     
     const duration = formatDuration(track.duration);
     
@@ -1281,19 +1275,20 @@ async function updateDiscordData() {
         statusIndicatorElement.className = 'status-indicator ' + config.discordStatus.toLowerCase();
     }
     
-    // Update currently playing section with Spotify data from Lanyard
+    // Update currently playing section with Spotify data from Lanyard ONLY
     const currentlyPlayingInfo = document.getElementById('currentlyPlayingInfo');
     if (currentlyPlayingInfo) {
         if (config.spotifyListening) {
+            // Show what YOU are listening to on Spotify
             currentlyPlayingInfo.innerHTML = `
                 <span class="song-title">${config.spotifyListening.song}</span>
                 <span class="song-artist">${config.spotifyListening.artist}</span>
             `;
-        } else if (currentTrack) {
-            // Fallback to music player data if no Spotify listening
+        } else {
+            // Show "Not listening" if no Spotify activity
             currentlyPlayingInfo.innerHTML = `
-                <span class="song-title">${currentTrack.title}</span>
-                <span class="song-artist">${currentTrack.author}</span>
+                <span class="song-title">Not listening to Spotify</span>
+                <span class="song-artist">-</span>
             `;
         }
     }
