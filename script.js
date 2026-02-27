@@ -1,9 +1,11 @@
 // Configuration data
 let config = {};
+let projects = [];
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
     await loadConfig();
+    await loadProjects();
     initializeDots();
     generateTabs();
     initializeTabs();
@@ -26,6 +28,18 @@ async function loadConfig() {
             playlistDescription: "currently in rotation - a personal collection of music i've been listening to lately",
             songs: []
         };
+    }
+}
+
+// Load projects from projects.json
+async function loadProjects() {
+    try {
+        const response = await fetch('projects.json');
+        projects = await response.json();
+        console.log('✅ Projects loaded:', projects.length);
+    } catch (error) {
+        console.error('Error loading projects:', error);
+        projects = [];
     }
 }
 
@@ -85,6 +99,12 @@ function generateTabs() {
                         <span class="discord-status">Online</span>
                     </div>
                 </div>
+            `;
+        } else if (tab.type === 'projects') {
+            tabContent.innerHTML = `
+                <h2>${tab.displayName.charAt(0).toUpperCase() + tab.displayName.slice(1)}</h2>
+                <p>${tab.content || 'Click on a project to view details.'}</p>
+                <div id="projectsContainer" class="projects-container"></div>
             `;
         } else if (tab.type === 'text') {
             tabContent.innerHTML = `
@@ -237,6 +257,118 @@ function initializeTabs() {
 }
 
 
+// Get language icon/logo
+function getLanguageIcon(language) {
+    const icons = {
+        'JavaScript': '🟨',
+        'Python': '🐍',
+        'TypeScript': '🔷',
+        'HTML': '🌐',
+        'CSS': '🎨',
+        'SQL': '🗄️',
+        'JSON': '📋',
+        'Luau': '🌙',
+        'React': '⚛️',
+        'Node.js': '🟢',
+        'MongoDB': '🍃',
+        'PostgreSQL': '🐘',
+        'Redis': '🔴',
+        'Vue.js': '💚',
+        'Angular': '🅰️',
+        'Next.js': '▲',
+        'Express': '🚂',
+        'Flask': '🧪',
+        'Django': '🎸',
+        'TensorFlow': '🧠',
+        'Keras': '🔬',
+        'NumPy': '🔢',
+        'Pandas': '🐼',
+        'Solidity': '💎',
+        'Web3.js': '🌐',
+        'Ethereum': '⟠',
+        'React Native': '📱',
+        'Firebase': '🔥',
+        'GraphQL': '◈',
+        'Swift': '🍎',
+        'Kotlin': '🤖',
+        'Electron': '⚡',
+        'SQLite': '💾',
+        'D3.js': '📊',
+        'Celery': '🌿',
+        'Chart.js': '📈',
+        'TailwindCSS': '💨',
+        'Socket.io': '🔌',
+        'Stripe API': '💳',
+        'API Integration': '🔗',
+        'Truffle': '🍫',
+        'Monaco Editor': '📝'
+    };
+    
+    return icons[language] || '💻';
+}
+
+// Render projects with dropdown functionality
+function renderProjects() {
+    const projectsContainer = document.getElementById('projectsContainer');
+    
+    if (!projectsContainer || projects.length === 0) {
+        return;
+    }
+    
+    projectsContainer.innerHTML = '';
+    
+    projects.forEach((project, index) => {
+        const projectItem = document.createElement('div');
+        projectItem.className = 'project-item';
+        
+        projectItem.innerHTML = `
+            <div class="project-header" data-project-index="${index}">
+                <h3 class="project-title">${project.projectTitle}</h3>
+                <svg class="dropdown-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="project-content">
+                <p class="project-description">${project.projectDescription}</p>
+                <div class="project-languages">
+                    ${project.projectCodeLanguages.map(lang => `
+                        <span class="language-tag">
+                            <span class="language-icon">${getLanguageIcon(lang)}</span>
+                            <span class="language-name">${lang}</span>
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        projectsContainer.appendChild(projectItem);
+    });
+    
+    initializeProjectDropdowns();
+}
+
+// Initialize dropdown functionality for projects
+function initializeProjectDropdowns() {
+    const projectHeaders = document.querySelectorAll('.project-header');
+    
+    projectHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const projectItem = header.parentElement;
+            const isOpen = projectItem.classList.contains('open');
+            
+            // Close all other project items
+            document.querySelectorAll('.project-item').forEach(item => {
+                item.classList.remove('open');
+            });
+            
+            // Toggle current item
+            if (!isOpen) {
+                projectItem.classList.add('open');
+            }
+        });
+    });
+}
+
 // Populate content with config data
 function populateContent() {
     // Update basic profile info
@@ -299,6 +431,9 @@ function populateContent() {
     if (config.discordActivity) {
         console.log('🎮 Current activity:', config.discordActivity.name);
     }
+    
+    // Render projects if projects tab exists
+    renderProjects();
 }
 
 

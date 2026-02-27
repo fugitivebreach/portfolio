@@ -18,8 +18,8 @@
     {
       "tabName": "projects",
       "displayName": "projects",
-      "type": "text",
-      "content": "Coming soon - showcase of my latest projects and work."
+      "type": "projects",
+      "content": "showcase of my latest projects and work."
     }
   ]
 }
