@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [
   {
     "projectTitle": "Royal Guard Services",
@@ -7,13 +6,3 @@
     "projectCodeLanguages": ["JavaScript", "Python", "HTML", "CSS", "SQL", "JSON", "Luau"]
   }
 ]
-=======
-[
-  {
-    "projectTitle": "Royal Guard Services",
-    "projectDescription": "Royal Guard Services is a multi-platform automation and management infrastructure built to power large-scale online communities and Roblox military organizations. Developed using Python, JavaScript, JSON, Luau, HTML, and CSS, the system integrates advanced Discord bot architecture, Roblox group automation, verification systems, rank binding, moderation tracking, ticket management, XP progression systems, and custom interactive web panels.\n\nThe backend is primarily powered by Python for scalable bot logic and database management, while JavaScript and JSON handle dynamic configurations and client-side integrations. Luau is used for Roblox in-game systems and rank automation. The web interface is structured using HTML and CSS to deliver clean administrative dashboards and interactive panels.\n\nRoyal Guard Services emphasizes modular architecture, permission hierarchy systems, persistent UI components, database-driven configuration, and enterprise-style logging frameworks. The project demonstrates full-stack development capabilities, cross-platform integration, API usage, security-conscious design, and large-scale community management engineering.",
-    "projectBannerImageFilePath": "/images/task-manager.png",
-    "projectCodeLanguages": ["JavaScript", "Python", "HTML", "CSS", "SQL", "JSON", "Luau"]
-  }
-]
->>>>>>> 9e722938d7e80c152f577d4ffe84cdcb590144fb
