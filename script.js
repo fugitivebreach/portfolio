@@ -497,7 +497,17 @@ async function loadTrackFromPlaylist(index) {
         
         // Initialize or load new video in YouTube player
         if (youtubePlayer && youtubePlayer.loadVideoById) {
-            youtubePlayer.loadVideoById(song.videoId);
+            // Load and auto-play the video
+            youtubePlayer.loadVideoById({
+                videoId: song.videoId,
+                startSeconds: 0
+            });
+            // Start playing after a brief delay
+            setTimeout(() => {
+                if (youtubePlayer && youtubePlayer.playVideo) {
+                    youtubePlayer.playVideo();
+                }
+            }, 1000);
             console.log('✅ Loaded new video:', trackData.title);
         } else {
             // Wait a bit for DOM to be ready, then initialize YouTube player
