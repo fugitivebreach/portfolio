@@ -1,15 +1,20 @@
 // Load playlist from playlist.json
-let playlist = [];
-
 async function loadPlaylist() {
     try {
         const response = await fetch('playlist.json');
-        playlist = await response.json();
-        console.log('✅ Playlist loaded:', playlist.length, 'songs');
-        return playlist;
+        const data = await response.json();
+        
+        // Assign to global playlist variable from script.js
+        if (typeof playlist !== 'undefined') {
+            playlist.length = 0;
+            playlist.push(...data);
+        }
+        
+        console.log('✅ Playlist loaded:', data.length, 'songs');
+        return data;
     } catch (error) {
         console.error('Error loading playlist:', error);
-        playlist = [
+        const fallback = [
             {
                 title: 'East Coast',
                 artist: 'alexgoffline',
@@ -17,7 +22,15 @@ async function loadPlaylist() {
                 duration: 180000
             }
         ];
-        return playlist;
+        
+        if (typeof playlist !== 'undefined') {
+            playlist.length = 0;
+            playlist.push(...fallback);
+        } else {
+            window._playlistData = fallback;
+        }
+        
+        return fallback;
     }
 }
 
