@@ -1,11 +1,8 @@
 // Configuration data
 let config = {};
 let projects = [];
-<<<<<<< HEAD
 let lavalinkPlayer = null;
 let currentTrack = null;
-=======
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -122,12 +119,6 @@ function generateTabs() {
                         </div>
                     </div>
                 </div>
-            `;
-        } else if (tab.type === 'projects') {
-            tabContent.innerHTML = `
-                <h2>${tab.displayName.charAt(0).toUpperCase() + tab.displayName.slice(1)}</h2>
-                <p>${tab.content || 'Click on a project to view details.'}</p>
-                <div id="projectsContainer" class="projects-container"></div>
             `;
         } else if (tab.type === 'projects') {
             tabContent.innerHTML = `
@@ -286,7 +277,6 @@ function initializeTabs() {
 }
 
 
-<<<<<<< HEAD
 // Get language icon/logo SVG
 function getLanguageIcon(language) {
     const icons = {
@@ -303,56 +293,6 @@ function getLanguageIcon(language) {
     };
     
     return icons[language] || '<svg viewBox="0 0 24 24" fill="#888"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg>';
-=======
-// Get language icon/logo
-function getLanguageIcon(language) {
-    const icons = {
-        'JavaScript': '🟨',
-        'Python': '🐍',
-        'TypeScript': '🔷',
-        'HTML': '🌐',
-        'CSS': '🎨',
-        'SQL': '🗄️',
-        'JSON': '📋',
-        'Luau': '🌙',
-        'React': '⚛️',
-        'Node.js': '🟢',
-        'MongoDB': '🍃',
-        'PostgreSQL': '🐘',
-        'Redis': '🔴',
-        'Vue.js': '💚',
-        'Angular': '🅰️',
-        'Next.js': '▲',
-        'Express': '🚂',
-        'Flask': '🧪',
-        'Django': '🎸',
-        'TensorFlow': '🧠',
-        'Keras': '🔬',
-        'NumPy': '🔢',
-        'Pandas': '🐼',
-        'Solidity': '💎',
-        'Web3.js': '🌐',
-        'Ethereum': '⟠',
-        'React Native': '📱',
-        'Firebase': '🔥',
-        'GraphQL': '◈',
-        'Swift': '🍎',
-        'Kotlin': '🤖',
-        'Electron': '⚡',
-        'SQLite': '💾',
-        'D3.js': '📊',
-        'Celery': '🌿',
-        'Chart.js': '📈',
-        'TailwindCSS': '💨',
-        'Socket.io': '🔌',
-        'Stripe API': '💳',
-        'API Integration': '🔗',
-        'Truffle': '🍫',
-        'Monaco Editor': '📝'
-    };
-    
-    return icons[language] || '💻';
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 // Render projects with dropdown functionality
@@ -377,11 +317,7 @@ function renderProjects() {
                 </svg>
             </div>
             <div class="project-content">
-<<<<<<< HEAD
-                <p class="project-description">${project.projectDescription.replace(/\\n/g, '<br><br>')}</p>
-=======
                 <p class="project-description">${project.projectDescription}</p>
->>>>>>> c70ab06c6a705799157e991199781900d733faca
                 <div class="project-languages">
                     ${project.projectCodeLanguages.map(lang => `
                         <span class="language-tag">
@@ -486,12 +422,9 @@ function populateContent() {
     
     // Render projects if projects tab exists
     renderProjects();
-<<<<<<< HEAD
     
     // Load Spotify music player
     loadSpotifyPlayer();
-=======
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 // Initialize Lavalink music player

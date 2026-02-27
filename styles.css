@@ -231,7 +231,6 @@ body {
 }
 
 .project-item {
-<<<<<<< HEAD
     background: linear-gradient(135deg, rgba(30, 30, 30, 0.6), rgba(20, 20, 20, 0.8));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
@@ -244,24 +243,12 @@ body {
     border-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-=======
-    background: rgba(30, 30, 30, 0.5);
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.project-item:hover {
-    border-color: #555;
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 .project-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-<<<<<<< HEAD
     padding: 18px 24px;
     cursor: pointer;
     user-select: none;
@@ -295,23 +282,6 @@ body {
     color: #fff;
     margin: 0;
     letter-spacing: -0.3px;
-=======
-    padding: 16px 20px;
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.2s ease;
-}
-
-.project-header:hover {
-    background: rgba(40, 40, 40, 0.5);
-}
-
-.project-title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #fff;
-    margin: 0;
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 .dropdown-icon {
@@ -338,18 +308,11 @@ body {
 }
 
 .project-description {
-<<<<<<< HEAD
     color: #b8b8b8;
     font-size: 14px;
     line-height: 1.7;
     margin: 0 0 20px 0;
     text-align: justify;
-=======
-    color: #aaa;
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0 0 15px 0;
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 .project-languages {
@@ -359,7 +322,6 @@ body {
 }
 
 .language-tag {
-<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.06);
     color: #fff;
     padding: 7px 14px;
@@ -389,43 +351,16 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 .language-icon svg {
     width: 100%;
     height: 100%;
     display: block;
-=======
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.language-tag:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.language-icon {
-    font-size: 14px;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
 
 .language-name {
     line-height: 1;
 }
 
-<<<<<<< HEAD
 /* Music Player */
 .music-player {
     margin-top: 30px;
@@ -671,8 +606,6 @@ body {
     transform: scale(1.1);
 }
 
-=======
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 /* Responsive design */
 @media (max-width: 768px) {
     .main-container {
@@ -706,7 +639,6 @@ body {
     .project-item.open .project-content {
         padding: 0 16px 16px 16px;
     }
-<<<<<<< HEAD
     
     .music-track {
         flex-direction: column;
@@ -726,6 +658,4 @@ body {
     .spotify-link {
         align-self: center;
     }
-=======
->>>>>>> c70ab06c6a705799157e991199781900d733faca
 }
