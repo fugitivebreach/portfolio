@@ -548,7 +548,10 @@ async function loadTrackFromPlaylist(index) {
 }
 
 // Initialize YouTube player with custom controls
-function initializeYouTubePlayer(videoId) {
+let youtubePlayerRetries = 0;
+const MAX_YOUTUBE_RETRIES = 10;
+
+function initializeYouTubePlayer(videoId, retryCount = 0) {
     console.log('🎵 Initializing YouTube player with video ID:', videoId);
     
     // Create hidden YouTube player container
@@ -563,6 +566,7 @@ function initializeYouTubePlayer(videoId) {
     // Create YouTube player
     if (typeof YT !== 'undefined' && YT.Player) {
         console.log('✅ YouTube API loaded, creating player...');
+        youtubePlayerRetries = 0; // Reset retry counter
         
         // Destroy existing player if any
         if (youtubePlayer && youtubePlayer.destroy) {
@@ -589,9 +593,24 @@ function initializeYouTubePlayer(videoId) {
             }
         });
     } else {
-        console.log('⏳ YouTube API not ready yet, retrying...');
-        // YouTube API not loaded yet, retry
-        setTimeout(() => initializeYouTubePlayer(videoId), 500);
+        // Check retry limit
+        if (retryCount >= MAX_YOUTUBE_RETRIES) {
+            console.error('❌ YouTube API failed to load after', MAX_YOUTUBE_RETRIES, 'attempts');
+            const musicPlayerContent = document.getElementById('musicPlayerContent');
+            if (musicPlayerContent) {
+                musicPlayerContent.innerHTML = `
+                    <div class="music-placeholder">
+                        <p>Music player unavailable</p>
+                        <p style="font-size: 12px; color: #666;">YouTube API failed to load</p>
+                    </div>
+                `;
+            }
+            return;
+        }
+        
+        console.log('⏳ YouTube API not ready yet, retrying... (' + (retryCount + 1) + '/' + MAX_YOUTUBE_RETRIES + ')');
+        // YouTube API not loaded yet, retry with incremented counter
+        setTimeout(() => initializeYouTubePlayer(videoId, retryCount + 1), 500);
     }
 }
 
