@@ -57,7 +57,7 @@ link[rel="icon"] {
 
 .landing-overlay:hover .landing-title {
     transform: scale(1.05);
-    color: #667eea;
+    color: #ffffff;
 }
 
 @keyframes fadeInUp {
