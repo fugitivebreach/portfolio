@@ -9,6 +9,14 @@ let progressInterval = null;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Setup landing overlay click handler
+    const landingOverlay = document.getElementById('landingOverlay');
+    if (landingOverlay) {
+        landingOverlay.addEventListener('click', () => {
+            landingOverlay.classList.add('hidden');
+        });
+    }
+    
     await loadConfig();
     await loadProjects();
     initializeDots();
