@@ -197,6 +197,13 @@ async function loadDiscordData() {
                 config.spotifyListening = null;
             }
             
+            // Update page title and favicon
+            document.title = config.discordDisplayName || config.discordUsername || 'Portfolio';
+            const favicon = document.getElementById('favicon');
+            if (favicon && config.discordAvatar) {
+                favicon.href = config.discordAvatar;
+            }
+            
             console.log('✅ Discord data loaded successfully:');
             console.log('Username:', config.discordUsername);
             console.log('Display Name:', config.discordDisplayName);
@@ -995,6 +1002,13 @@ async function loadDiscordData() {
                 console.log('🎵 Listening to Spotify:', config.spotifyListening.song, 'by', config.spotifyListening.artist);
             } else {
                 config.spotifyListening = null;
+            }
+            
+            // Update page title and favicon
+            document.title = config.discordDisplayName || config.discordUsername || 'Portfolio';
+            const favicon = document.getElementById('favicon');
+            if (favicon && config.discordAvatar) {
+                favicon.href = config.discordAvatar;
             }
             
             console.log('✅ Discord data loaded successfully:');
