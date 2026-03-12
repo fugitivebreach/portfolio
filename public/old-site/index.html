@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <link rel="icon" type="image/png" id="favicon" href="https://cdn.discordapp.com/embed/avatars/0.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Landing overlay -->
+    <div class="landing-overlay" id="landingOverlay">
+        <div class="landing-content">
+            <h1 class="landing-title">Click to Enter</h1>
+        </div>
+    </div>
+
+    <!-- Animated dots background -->
+    <div class="dots-container"></div>
+    
+
+    <!-- Main container -->
+    <div class="main-container">
+        <!-- Tabs -->
+        <div class="tabs" id="tabsContainer">
+            <!-- Tabs will be generated dynamically -->
+        </div>
+        
+        <!-- Tab separator line -->
+        <div class="tab-separator"></div>
+        
+        <!-- Content -->
+        <div class="content" id="contentContainer">
+            <!-- Tab content will be generated dynamically -->
+        </div>
+        
+        <!-- Music Player - Always visible -->
+        <div class="music-player" id="musicPlayer">
+            <div class="music-player-header">
+                <svg class="music-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                </svg>
+                <span class="music-player-title">Now Playing</span>
+            </div>
+            <div class="music-player-content" id="musicPlayerContent">
+                <div class="music-loading">
+                    <div class="loading-spinner"></div>
+                    <span>Loading music...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="playlist-loader.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
