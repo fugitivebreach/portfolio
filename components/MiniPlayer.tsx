@@ -6,10 +6,7 @@ import { usePathname } from 'next/navigation';
 export default function MiniPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [currentSong, setCurrentSong] = useState({
-    title: 'East Coast',
-    artist: 'alexgoffline',
-  });
+  const [currentSong] = useState({ title: 'East Coast', artist: 'alexgoffline' });
   const pathname = usePathname();
 
   // Show mini player when user switches tabs while music is playing
@@ -19,7 +16,7 @@ export default function MiniPlayer() {
       const timer = setTimeout(() => setIsExpanded(false), 3000);
       return () => clearTimeout(timer);
     }
-  }, [pathname]);
+  }, [pathname, isPlaying]);
 
   if (!isPlaying) return null;
 

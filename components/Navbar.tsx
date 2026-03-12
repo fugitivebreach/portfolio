@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { getCookie } from 'cookies-next';
 
 export default function Navbar() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ username: string; avatar: string } | null>(null);
   const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {

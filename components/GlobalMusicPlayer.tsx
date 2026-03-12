@@ -2,9 +2,28 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+interface YTPlayer {
+  loadVideoById: (options: { videoId: string; startSeconds: number }) => void;
+  playVideo: () => void;
+  pauseVideo: () => void;
+  getPlayerState: () => number;
+  destroy: () => void;
+}
+
+interface YTPlayerState {
+  PLAYING: number;
+  PAUSED: number;
+  ENDED: number;
+}
+
+interface YT {
+  Player: new (elementId: string, config: unknown) => YTPlayer;
+  PlayerState: YTPlayerState;
+}
+
 declare global {
   interface Window {
-    YT: any;
+    YT: YT;
     onYouTubeIframeAPIReady: () => void;
   }
 }
@@ -20,8 +39,8 @@ export default function GlobalMusicPlayer() {
   const [playlist, setPlaylist] = useState<Song[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef<any>(null);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const playerRef = useRef<YTPlayer | null>(null);
+  const [, setIsPlayerReady] = useState(false);
 
   // Load playlist
   useEffect(() => {
@@ -79,7 +98,7 @@ export default function GlobalMusicPlayer() {
           console.log('✅ Player ready');
           setIsPlayerReady(true);
         },
-        onStateChange: (event: any) => {
+        onStateChange: (event: { data: number }) => {
           if (event.data === window.YT.PlayerState.PLAYING) {
             setIsPlaying(true);
           } else if (event.data === window.YT.PlayerState.PAUSED) {
@@ -89,7 +108,7 @@ export default function GlobalMusicPlayer() {
             playNext();
           }
         },
-        onError: (event: any) => {
+        onError: (event: { data: number }) => {
           console.error('❌ Player error:', event.data);
         }
       }
@@ -101,7 +120,7 @@ export default function GlobalMusicPlayer() {
     if (playlist.length > 0 && !playerRef.current) {
       initializePlayer();
     }
-  }, [playlist]);
+  }, [playlist, initializePlayer]);
 
   const playNext = () => {
     const nextIndex = (currentIndex + 1) % playlist.length;
@@ -142,7 +161,7 @@ export default function GlobalMusicPlayer() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    (window as any).globalMusicPlayer = {
+    (window as unknown as { globalMusicPlayer: unknown }).globalMusicPlayer = {
       play: () => playerRef.current?.playVideo(),
       pause: () => playerRef.current?.pauseVideo(),
       next: playNext,
@@ -151,7 +170,7 @@ export default function GlobalMusicPlayer() {
       getCurrentSong: () => playlist[currentIndex],
       isPlaying: () => isPlaying
     };
-  }, [currentIndex, isPlaying, playlist]);
+  }, [currentIndex, isPlaying, playlist, playNext, playPrevious, togglePlay]);
 
   // Broadcast current song to PersistentMusicPlayer
   useEffect(() => {
