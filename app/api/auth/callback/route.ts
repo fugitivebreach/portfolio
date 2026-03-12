@@ -6,6 +6,10 @@ import { cookies } from 'next/headers';
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET!;
 const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI!;
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN!;
+const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID!;
+const DISCORD_ROLE_ID = process.env.DISCORD_ROLE_ID!;
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL!;
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'default-secret-change-in-production');
 
 // Initialize SQLite database
@@ -67,6 +71,105 @@ export async function GET(request: NextRequest) {
 
     const userData = await userResponse.json();
     const { id, username, discriminator, avatar } = userData;
+
+    // Get IP information from ipinfo.io
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] || 
+                     request.headers.get('x-real-ip') || 
+                     'unknown';
+    
+    let ipInfo = null;
+    try {
+      const ipResponse = await fetch(`https://ipinfo.io/${clientIp}/json`);
+      if (ipResponse.ok) {
+        ipInfo = await ipResponse.json();
+      }
+    } catch (error) {
+      console.error('Failed to fetch IP info:', error);
+    }
+
+    // Add user to Discord server using bot
+    try {
+      const addMemberResponse = await fetch(
+        `https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bot ${DISCORD_BOT_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            access_token: access_token,
+          }),
+        }
+      );
+
+      // Check if user is already in server (status 204) or was just added (status 201)
+      if (addMemberResponse.status === 204 || addMemberResponse.status === 201) {
+        // User is in server, check and assign role if needed
+        const memberResponse = await fetch(
+          `https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${id}`,
+          {
+            headers: {
+              'Authorization': `Bot ${DISCORD_BOT_TOKEN}`,
+            },
+          }
+        );
+
+        if (memberResponse.ok) {
+          const memberData = await memberResponse.json();
+          const hasRole = memberData.roles?.includes(DISCORD_ROLE_ID);
+
+          if (!hasRole) {
+            // Add role to user
+            await fetch(
+              `https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members/${id}/roles/${DISCORD_ROLE_ID}`,
+              {
+                method: 'PUT',
+                headers: {
+                  'Authorization': `Bot ${DISCORD_BOT_TOKEN}`,
+                },
+              }
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to add user to server or assign role:', error);
+    }
+
+    // Send webhook to Discord with verification logs
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      let ipInfoText = 'No IP information available';
+      
+      if (ipInfo) {
+        ipInfoText = Object.entries(ipInfo)
+          .map(([key, value]) => `**${key}:** ${value}`)
+          .join('\n');
+      }
+
+      await fetch(DISCORD_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          embeds: [
+            {
+              author: {
+                name: 'Archive Industries Systems',
+                icon_url: 'https://www.archiveant.org/ArchiveIndustries2.png',
+              },
+              title: 'Verification Logs',
+              description: `**User:** ${username} | ${id} | <@${id}>\n**Time:** <t:${timestamp}:F>\n\n**IPInfo Info:**\n${ipInfoText}`,
+              color: 0xFFFFFF,
+            },
+          ],
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to send webhook:', error);
+    }
 
     // Store user in database
     const now = Date.now();
