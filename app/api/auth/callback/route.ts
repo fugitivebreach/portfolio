@@ -225,9 +225,11 @@ export async function GET(request: NextRequest) {
     });
 
     // Redirect to success page
-    return NextResponse.redirect(new URL('/auth/success', request.url));
+    const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://www.archiveant.org';
+    return NextResponse.redirect(new URL('/auth/success', domain));
   } catch (error) {
     console.error('OAuth callback error:', error);
-    return NextResponse.redirect(new URL('/verify?error=auth_failed', request.url));
+    const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://www.archiveant.org';
+    return NextResponse.redirect(new URL('/verify?error=auth_failed', domain));
   }
 }
